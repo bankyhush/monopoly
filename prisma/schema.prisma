@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model user {
+  userid         Int      @id @default(autoincrement()) @map("userid")
+  email          String   @unique @db.VarChar(50)
+  password       String   @db.VarChar(50)
+  account_type   String   @db.VarChar(50)
+  stoken         String   @db.VarChar(10)
+  wallet_address String   @db.VarChar(100)
+  email_status   String   @default("false") @db.VarChar(6)
+  kyc_status     String   @default("false") @db.VarChar(6)
+  user_type      String   @default("USER") @db.VarChar(6)
+  photo          String   @default("default.png") @db.VarChar(50)
+  phone          String?  @db.VarChar(50)
+  country        String?  @db.VarChar(50)
+  city           String?  @db.VarChar(20)
+  address        String?  @db.VarChar(50)
+  zipcode        String?  @db.VarChar(10)
+  dob            String?  @db.VarChar(8)
+  fullname       String?  @db.VarChar(50)
+  currency       String   @default("$") @db.VarChar(6)
+  frontimage     String?  @db.VarChar(100)
+  backimage      String?  @db.VarChar(100)
+  current_trader String?  @db.VarChar(50)
+  win_rate       String?  @db.VarChar(50)
+  trade_status   String?  @db.VarChar(50)
+  trader_profit  String?  @db.VarChar(50)
+  copiers        String?  @db.VarChar(50)
+  profit         String   @default("0.00") @db.VarChar(100)
+  deposit        String   @default("0.00") @db.VarChar(100)
+  withdrawal     String   @default("0.00") @db.VarChar(100)
+  bonus          String   @default("0.00") @db.VarChar(100)
+  activeplan     String?  @default("NONE") @db.VarChar(100)
+  planamount     String   @default("0.00") @db.VarChar(100)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now())
+
+  @@map("user")
+}
+
+model user_balances {
+  balance_id       Int     @id @default(autoincrement()) @map("balance_id")
+  userid           Int?    
+  coin_id          Int?
+  available_balance Decimal @default(0.00) @db.Decimal(18, 2)
+  on_order_balance Decimal @default(0.00) @db.Decimal(18, 2)
+  staked_balance   Decimal @default(0.00) @db.Decimal(18, 2)
+
+  @@map("user_balances")
+}
+
+model coins {
+  coin_id              Int      @id @default(autoincrement()) @map("coin_id")
+  coin_name            String   @db.VarChar(100)
+  coin_title           String   @db.VarChar(100)
+  coin_rate            Decimal  @db.Decimal(10, 3)
+  photo                String   @db.VarChar(200)
+  with_min             String   @db.VarChar(50)
+  with_max             String   @db.VarChar(50)
+  with_instructions    String   @db.Text
+  deposit_instructions String   @db.Text
+  deposit_address      String   @default("Please contact support for wallet address") @db.VarChar(100)
+  percent              String   @db.VarChar(50)
+  coin_visible         String   @default("true") @db.VarChar(11)
+  type                 String?  @db.VarChar(50)
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now())
+
+  @@map("coins")
+}
+
+model copytrader {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(100)
+  photo         String   @db.VarChar(255)
+  notrades      String   @db.VarChar(100)
+  nocopiers     String   @db.VarChar(100)
+  status        String   @db.VarChar(50)
+  nowins        String   @db.VarChar(100)
+  rank          String   @db.VarChar(50)
+  strategy_desc String   @db.Text
+  noloss        String   @db.VarChar(100)
+  profit        String   @db.VarChar(100)
+  loss          String   @db.VarChar(50)
+  edate         String   @db.VarChar(100)
+  created_at    DateTime @default(now())
+  commision     String   @default("100") @db.VarChar(100)
+
+  @@map("copytrader")
+}
+
+model news {
+  id       Int      @id @default(autoincrement())
+  title    String   @db.VarChar(255)
+  content  String   @db.Text
+  author   String   @db.VarChar(100)
+  type     String   @db.VarChar(100)
+  mylink   String?  @db.VarChar(200)
+  photo    String   @db.VarChar(255)
+  date     DateTime @default(now())
+
+  @@map("news")
+}
+
+model staked_records {
+  id         Int      @id @default(autoincrement())
+  userid     Int
+  plan_id    Int
+  title      String   @db.VarChar(100)
+  apy        String   @db.VarChar(15)
+  amount     Decimal  @db.Decimal(18, 8)
+  start_date DateTime @default(now())
+  lock_period Int
+  status     String?  @default("active") @db.VarChar(11)
+
+  @@map("staked_records")
+}
+
+model staking_plans {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(255)
+  coin           String   @db.VarChar(100)
+  apy            String   @db.VarChar(50)
+  lock_period    Int
+  minimum_amount Decimal  @default(0.00000000) @db.Decimal(18, 8)
+  maximum_amount String   @db.VarChar(100)
+  type           String   @default("Locked") @db.VarChar(15)
+  status         String   @default("true") @db.VarChar(10)
+  created_at     DateTime @default(now())
+
+  @@map("staking_plans")
+}
+
+model trade {
+  id           Int      @id @default(autoincrement())
+  volume       String   @db.VarChar(100)
+  userid       String   @db.VarChar(100)
+  coin_id      Int
+  trade_result String   @db.VarChar(100)
+  sl           String   @db.VarChar(100)
+  tp           String   @db.VarChar(100)
+  type         String   @db.VarChar(100)
+  symbol       String   @db.VarChar(100)
+  status       String   @db.VarChar(100)
+  expired_time String   @db.VarChar(100)
+  created_at   DateTime @default(now())
+  bgat         String?  @default("0") @db.VarChar(100)
+  sdat         String?  @default("0") @db.VarChar(100)
+  mdat         String?  @default("0") @db.VarChar(100)
+  trade_signal String?  @default("Processing") @db.VarChar(50)
+  coin_name    String?  @db.VarChar(50)
+
+  @@map("trade")
+}
+
+model tradingplans {
+  id                 Int    @id @default(autoincrement())
+  plan_name          String @db.VarChar(50)
+  plan_des           String @db.VarChar(100)
+  min_ins            String @db.VarChar(100)
+  max_ins            String @db.VarChar(100)
+  days_duration      String @db.VarChar(100)
+  daily_interest_rate String @db.VarChar(100)
+  status             String @db.VarChar(50)
+
+  @@map("tradingplans")
+}
+
+model transactionhistory {
+  id             Int      @id @default(autoincrement())
+  coin_id        Int
+  userid         String   @db.VarChar(100)
+  name           String   @db.VarChar(100)
+  status         String   @db.VarChar(100)
+  method         String   @db.VarChar(100)
+  trans_time     DateTime @default(now())
+  trans_id       String   @db.VarChar(100)
+  amount         String   @db.VarChar(100)
+  type           String   @db.VarChar(100)
+  deposit_info   String?  @db.Text
+  withdraw_info  String?  @db.Text
+  copytrade_info String?  @db.Text
+  mining_info    String?  @db.Text
+  auto           String?  @db.VarChar(5)
+  photo          String?  @db.VarChar(100)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now())
+
+  @@map("transactionhistory")
+}
