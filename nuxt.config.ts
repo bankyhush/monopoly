@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET,
     email: {
+      admin: process.env.ADMIN_EMAIL,
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
       user: process.env.EMAIL_USER,
@@ -18,4 +19,5 @@ export default defineNuxtConfig({
 
 // pnpm add nuxt@4 prisma @prisma/client pg bcryptjs jsonwebtoken nodemailer cookie vue-toastification dotenv zod
 // npx prisma init
+// pnpm add nanoid
 // pnpm add -D @types/node

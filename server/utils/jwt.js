@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET || "supersecret342345";
 
 export function signAccessToken(user) {
   return jwt.sign({ sub: user.id, role: user.role }, JWT_SECRET, {
