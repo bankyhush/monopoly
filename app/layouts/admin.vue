@@ -95,6 +95,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ["auth.global", "role.admin"],
+});
+
 const navItems = [
   { label: "Dashboard", icon: "lucide:home", to: "/wp-admin" },
   { label: "Users", icon: "lucide:users", to: "/wp-admin/users" },
