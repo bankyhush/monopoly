@@ -1,74 +1,65 @@
-// server/api/admin/copytrader/index.post.js
-
 import { prisma } from "../../../database/prisma";
 
 export default defineEventHandler(async (event) => {
-  const {
-    name,
-    photo,
-    notrades,
-    nocopiers,
-    status,
-    nowins,
-    rank,
-    strategy_desc,
-    noloss,
-    profit,
-    loss,
-    edate,
-    commision,
-  } = await readBody(event);
-
-  // Validate required fields
-  if (
-    !name ||
-    !photo ||
-    !notrades ||
-    !nocopiers ||
-    !status ||
-    !nowins ||
-    !rank ||
-    !strategy_desc ||
-    !noloss ||
-    !profit ||
-    !loss ||
-    !edate ||
-    !commision
-  ) {
-    throw createError({
-      statusCode: 400,
-      message: "All fields are required!",
-    });
-  }
-
   try {
-    const newTrader = await prisma.copytrader.create({
+    const body = await readBody(event);
+
+    const {
+      name,
+      photo,
+      noTrades,
+      noCopiers,
+      status,
+      noWins,
+      rank,
+      strategyDesc,
+      noLoss,
+      profit,
+      loss,
+      eDate,
+      commission = "100",
+      copyTraderVisible = true,
+    } = body;
+
+    // Basic validation
+    if (!name || !photo || !status) {
+      throw createError({
+        statusCode: 400,
+        message: "Name, photo, and status are required",
+      });
+    }
+
+    // Create CopyTrader
+    const newCopyTrader = await prisma.copyTrader.create({
       data: {
         name,
         photo,
-        notrades,
-        nocopiers,
+        noTrades,
+        noCopiers,
         status,
-        nowins,
+        noWins,
         rank,
-        strategy_desc,
-        noloss,
+        strategyDesc,
+        noLoss,
         profit,
         loss,
-        edate,
-        commision,
+        eDate,
+        commission,
+        copyTraderVisible,
       },
     });
 
     return {
       success: true,
-      message: "CopyTrader created successfully!",
-      data: newTrader,
+      message: "CopyTrader created successfully",
+      data: newCopyTrader,
     };
   } catch (error) {
+    console.error("CopyTrader creation error:", error);
+
     throw createError({
-      statusCode: 500,
-      message: error.message || "Handler Server error",
+      statusCode: error.statusCode || 500,
+      message: error.message || "CopyTrader Server Error",
     });
   }
 });

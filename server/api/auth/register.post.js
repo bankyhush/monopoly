@@ -6,16 +6,16 @@ import { sendMail } from "../../email/mailer";
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    let { name, email, password } = body;
+    let { fullname, email, password } = body;
 
     // Normalize email
     const normalizedEmail = email?.trim().toLowerCase();
 
     // Field validation
-    if (!normalizedEmail || !name || !password) {
+    if (!normalizedEmail || !fullname || !password) {
       throw createError({
         statusCode: 400,
-        statusMessage: "All fields are required",
+        message: "All fields are required",
       });
     }
 
@@ -23,14 +23,14 @@ export default defineEventHandler(async (event) => {
     if (!emailRegex.test(normalizedEmail)) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Invalid email address",
+        message: "Invalid email address",
       });
     }
 
     if (password.length < 8) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Password must be at least 8 characters",
+        message: "Password must be at least 8 characters",
       });
     }
 
@@ -42,56 +42,56 @@ export default defineEventHandler(async (event) => {
     if (existingUser) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Email already registered",
+        message: "Email already registered",
       });
     }
 
     // Generate data
     const walletAddress = `NX0${nanoid(31)}`;
-    const inviteCode = nanoid(8);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = await prisma.user.create({
       data: {
-        name,
+        fullname,
         email: normalizedEmail,
         password: hashedPassword,
         role: "USER",
-        walletAddress,
-        inviteCode,
-        otp,
+        walletAddress: walletAddress,
+        sToken: otp,
       },
       select: {
-        id: true,
-        name: true,
+        userId: true,
+        fullname: true,
         email: true,
         role: true,
         walletAddress: true,
-        inviteCode: true,
       },
     });
 
     // Create coin balances
     const coins = await prisma.coin.findMany({
       where: { coinVisible: true },
-      select: { id: true },
+      select: { coinId: true },
     });
 
-    await prisma.userBalance.createMany({
-      data: coins.map((coin) => ({
-        userId: user.id,
-        coinId: coin.id,
-        available: 0,
-        onOrder: 0,
-        staked: 0,
-      })),
-    });
+    if (coins.length > 0) {
+      await prisma.userBalance.createMany({
+        data: coins.map((coin) => ({
+          userId: user.userId,
+          coinId: coin.coinId,
+          availableBalance: 0,
+          onOrderBalance: 0,
+          stakedBalance: 0,
+        })),
+        skipDuplicates: true,
+      });
+    }
 
     // Send OTP email
     const emailHtml = `
-      <p>Hi ${user.name},</p>
+      <p>Hi ${user.fullname},</p>
       <p>Thank you for registering. Please use the OTP below to verify your email:</p>
       <h2>${otp}</h2>
       <p>This code will expire in 10 minutes.</p>
@@ -113,7 +113,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || "Internal Server Error",
+      message: error.message || "Register Server Error",
     });
   }
 });
