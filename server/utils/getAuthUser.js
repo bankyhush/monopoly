@@ -1,3 +1,5 @@
+// utils/getAuthUser.js
+
 import { prisma } from "../database/prisma.js";
 
 import { verifyAccessToken } from "./jwt.js";

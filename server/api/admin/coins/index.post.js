@@ -1,8 +1,17 @@
 // server/api/admin/coins.js
 
 import { prisma } from "../../../database/prisma";
+import { getAuthUser } from "../../../utils/getAuthUser";
 
 export default defineEventHandler(async (event) => {
+  const user = await getAuthUser(event);
+  if (!user || user.role !== "ADMIN") {
+    throw createError({
+      statusCode: 403,
+      message: "Access denied: vip user only",
+    });
+  }
+
   const body = await readBody(event);
 
   const {
