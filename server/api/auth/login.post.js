@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
       },
     };
   } catch (error) {
-    console.error("Login Error:", error);
+    // console.error("Login Error:", error);
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || "Login Server Error",
