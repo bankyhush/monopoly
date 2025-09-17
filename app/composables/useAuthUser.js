@@ -21,10 +21,10 @@ export const useAuthUser = () => {
     return res.user;
   }
 
-  async function register(name, email, password) {
+  async function register(fullname, email, password) {
     const res = await $fetch("/api/auth/register", {
       method: "POST",
-      body: { name, email, password },
+      body: { fullname, email, password },
     });
     user.value = res.user;
     return res.user;

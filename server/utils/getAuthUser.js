@@ -14,7 +14,7 @@ export async function getAuthUser(event) {
 
     const user = await prisma.user.findUnique({
       where: { userId: Number(payload.sub) },
-      select: { userId: true, email: true, role: true, name: true },
+      select: { userId: true, email: true, role: true, fullname: true },
     });
     return user;
   } catch {

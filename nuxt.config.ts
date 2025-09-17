@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   modules: ["@nuxt/image", "@nuxt/ui"],
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
-    jwtSecret: process.env.JWT_SECRET,
+    jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
     email: {
       admin: process.env.ADMIN_EMAIL,
       host: process.env.EMAIL_HOST,
