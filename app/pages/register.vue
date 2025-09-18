@@ -1,6 +1,6 @@
 <template>
   <div class="pb-[50px]">
-    <!-- <HeroHeader /> -->
+    <HeroHeader />
   </div>
 
   <div class="min-h-screen flex flex-col">

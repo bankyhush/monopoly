@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- <HeroHeader class="pb-[50px]" /> -->
+    <HeroHeader class="pb-[50px]" />
 
     <div class="flex flex-col md:flex-row flex-1">
       <!-- Left Side -->
@@ -205,13 +205,5 @@ const router = useRouter();
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
-}
-
-function onSubmit() {
-  isLoading.value = true;
-  setTimeout(() => {
-    isLoading.value = false;
-    router.push("/wallet");
-  }, 1000);
 }
 </script>

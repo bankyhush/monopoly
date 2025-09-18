@@ -57,6 +57,9 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9
     devDependencies:
+      '@iconify-json/lucide':
+        specifier: ^1.2.68
+        version: 1.2.68
       '@nuxtjs/tailwindcss':
         specifier: ^6.14.0
         version: 6.14.0(magicast@0.3.5)
@@ -404,6 +407,9 @@ packages:
 
   '@floating-ui/vue@1.1.9':
     resolution: {integrity: sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ==}
+
+  '@iconify-json/lucide@1.2.68':
+    resolution: {integrity: sha512-lR5xNJdn2CT0iR7lM25G4SewBO4G2hbr3fTWOc3AE9BspflEcneh02E3l9TBaCU/JOHozTJevWLrxBGypD7Tng==}
 
   '@iconify/collections@1.0.594':
     resolution: {integrity: sha512-/hMILio9iIZQtsS/9lMPsnrzIToJvoitkROglHR9B4u4Tn5xXGdwQ+wh8/XlO251GN7e2D1dy+sL0cnq5XIiGQ==}
@@ -4744,6 +4750,10 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@iconify-json/lucide@1.2.68':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify/collections@1.0.594':
     dependencies:
