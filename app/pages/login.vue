@@ -46,7 +46,7 @@
                   :class="[
                     'py-2',
                     currentTab === 'email'
-                      ? 'border-b-2 border-black rounded-none shadow-none'
+                      ? 'border-b-2 border-black rounded-none shadow-none dark:text-black'
                       : '',
                     'cursor-pointer',
                   ]"
@@ -58,7 +58,7 @@
                   :class="[
                     'py-2',
                     currentTab === 'qr'
-                      ? 'border-b-2 border-black rounded-none shadow-none'
+                      ? 'border-b-2 border-black rounded-none shadow-none dark:text-black'
                       : '',
                     'cursor-pointer',
                   ]"
@@ -72,7 +72,7 @@
               <div v-if="currentTab === 'email'">
                 <form
                   @submit.prevent="onSubmit"
-                  class="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg"
+                  class="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg dark:bg-zinc-800"
                 >
                   <!-- Email Field -->
                   <div class="mb-5 relative">
@@ -119,7 +119,7 @@
                   <button
                     type="submit"
                     :disabled="isLoading"
-                    class="w-full bg-black text-white hover:shadow-lg py-1.5 rounded-md disabled:cursor-not-allowed disabled:bg-gray-500"
+                    class="cursor-pointer w-full bg-black dark:bg-white dark:text-black text-white hover:shadow-lg py-1.5 rounded-md disabled:cursor-not-allowed disabled:bg-gray-500"
                   >
                     <template v-if="isLoading">
                       <Icon

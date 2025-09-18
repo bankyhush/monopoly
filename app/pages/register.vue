@@ -130,7 +130,7 @@
             <!-- Submit -->
             <button
               type="submit"
-              class="w-full bg-primary text-white hover:shadow-lg dark:bg-primary-dark py-3 rounded-md cursor-pointer"
+              class="w-full bg-primary text-white hover:shadow-lg dark:bg-primary-dark dark:text-black py-3 rounded-md cursor-pointer"
             >
               Sign up
             </button>
