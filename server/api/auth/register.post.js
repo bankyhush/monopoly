@@ -1,3 +1,5 @@
+// /server/api/auth/register.post.js
+
 import { prisma } from "../../database/prisma";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
@@ -6,13 +8,13 @@ import { sendMail } from "../../email/mailer";
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    let { fullname, email, password } = body;
+    let { fullname, email, password, confirmPassword } = body;
 
     // Normalize email
     const normalizedEmail = email?.trim().toLowerCase();
 
     // Field validation
-    if (!normalizedEmail || !fullname || !password) {
+    if (!normalizedEmail || !fullname || !password || !confirmPassword) {
       throw createError({
         statusCode: 400,
         message: "All fields are required",
@@ -31,6 +33,14 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 400,
         message: "Password must be at least 8 characters",
+      });
+    }
+
+    // NEW: Confirm password check
+    if (password !== confirmPassword) {
+      throw createError({
+        statusCode: 400,
+        message: "Passwords do not match",
       });
     }
 
@@ -112,8 +122,8 @@ export default defineEventHandler(async (event) => {
     console.error("Registration Error:", error);
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      message: error.message || "Register Server Error",
+      statusCode: 500,
+      message: "Register Server Error",
     });
   }
 });

@@ -41,14 +41,42 @@
           <h1 class="text-4xl font-bold mb-2 text-black">
             Create your account
           </h1>
-          <span class="text-sm text-gray-500 mb-6">
-            Ensure this email can receive verification codes.
-          </span>
+          <span class="text-sm text-gray-500 mb-6"
+            >Ensure this email can receive verification codes.</span
+          >
 
           <form
             class="w-full mx-auto p-6 bg-white dark:bg-background shadow-md rounded-lg"
-            @submit.prevent="onSubmit"
+            @submit.prevent="registerHandler"
           >
+            <!-- Success Message -->
+            <div
+              v-if="successMessage"
+              class="mb-4 p-3 text-green-700 bg-green-100 rounded text-sm"
+            >
+              <UAlert
+                color="success"
+                variant="subtle"
+                title="Success!"
+                :description="successMessage"
+                icon="i-lucide-terminal"
+              />
+            </div>
+
+            <!-- Error Message -->
+            <div
+              v-if="errorMessage"
+              class="mb-4 p-3 text-red-700 bg-red-100 rounded text-sm"
+            >
+              <UAlert
+                color="error"
+                variant="subtle"
+                title="Failed!"
+                :description="errorMessage"
+                icon="i-lucide-terminal"
+              />
+            </div>
+
             <!-- Full Name -->
             <div class="mb-6 relative">
               <Icon
@@ -57,10 +85,10 @@
               />
               <input
                 type="text"
-                name="fullName"
                 placeholder="Full Name"
-                v-model="formData.fullName"
+                v-model="fullname"
                 class="w-full pl-10 pr-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
               />
             </div>
 
@@ -72,10 +100,10 @@
               />
               <input
                 type="email"
-                name="email"
                 placeholder="Email"
-                v-model="formData.email"
+                v-model="email"
                 class="w-full pl-10 pr-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
               />
             </div>
 
@@ -87,10 +115,10 @@
               />
               <input
                 :type="showPassword ? 'text' : 'password'"
-                name="password"
                 placeholder="Password"
-                v-model="formData.password"
+                v-model="password"
                 class="w-full pl-10 pr-10 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
               />
               <button
                 type="button"
@@ -110,10 +138,10 @@
               />
               <input
                 :type="showConfirmPassword ? 'text' : 'password'"
-                name="confirmPassword"
                 placeholder="Confirm Password"
-                v-model="formData.confirmPassword"
+                v-model="confirmPassword"
                 class="w-full pl-10 pr-10 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
               />
               <button
                 type="button"
@@ -128,11 +156,19 @@
             </div>
 
             <!-- Submit -->
+
             <button
               type="submit"
-              class="w-full bg-primary text-white hover:shadow-lg dark:bg-primary-dark dark:text-black py-3 rounded-md cursor-pointer"
+              :disabled="loading"
+              class="cursor-pointer w-full bg-black dark:bg-white dark:text-black text-white hover:shadow-lg py-1.5 rounded-md disabled:cursor-not-allowed disabled:bg-gray-500"
             >
-              Sign up
+              <template v-if="loading">
+                <Icon
+                  name="gg:spinner-two-alt"
+                  class="animate-spin text-2xl mx-auto"
+                />
+              </template>
+              <template v-else> Next </template>
             </button>
           </form>
 
@@ -149,21 +185,55 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-const formData = ref({
-  fullName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-});
+const fullname = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 
-function onSubmit() {
-  // For now, just log the form data or do nothing
-  console.log("Form submitted", formData.value);
-}
+const loading = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+
+const registerHandler = async () => {
+  errorMessage.value = "";
+  successMessage.value = "";
+  loading.value = true;
+
+  try {
+    await $fetch("/api/auth/register/", {
+      method: "POST",
+      body: {
+        fullname: fullname.value,
+        email: email.value,
+        password: password.value,
+        confirmPassword: confirmPassword.value,
+      },
+    });
+
+    successMessage.value = "Account created successfully. Redirecting...";
+    setTimeout(() => {
+      navigateTo("/verify");
+    }, 3000);
+  } catch (err) {
+    if (err?.data?.message) {
+      // Custom server error
+      errorMessage.value = err.data.message;
+    } else if (err?.message === "Network Error" || err?.status === 0) {
+      // Network or server unreachable
+      errorMessage.value =
+        "Unable to reach server. Please check your connection.";
+    } else {
+      // Catch-all fallback
+      errorMessage.value = "Something went wrong. Please try again.";
+    }
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

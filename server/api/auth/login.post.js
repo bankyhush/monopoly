@@ -55,11 +55,11 @@ export default defineEventHandler(async (event) => {
       },
     };
   } catch (error) {
-    // console.error("Login Error:", error);
+    //console.error("Login Error:", error);
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || "Login Server Error",
-      message: error.message || "An unexpected error occurred during login",
+      statusCode: 500,
+      statusMessage: "Login Server Error",
+      message: "An unexpected error occurred during login",
     });
   }
 });
