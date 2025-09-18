@@ -1,7 +1,5 @@
 <template>
-  <div class="text-emerald-600 text-xl text-center">
-    Hey Homepage
-
-    <UButton color="neutral">Button</UButton>
+  <div class="text-black">
+    <NuxtLink to="/login">Login</NuxtLink>
   </div>
 </template>
