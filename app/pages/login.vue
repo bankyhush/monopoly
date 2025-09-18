@@ -1,7 +1,9 @@
 <template>
-  <div class="min-h-screen flex flex-col">
-    <HeroHeader class="pb-[50px]" />
+  <div class="pb-[50px]">
+    <HeroHeader />
+  </div>
 
+  <div class="min-h-screen flex flex-col">
     <div class="flex flex-col md:flex-row flex-1">
       <!-- Left Side -->
       <div
@@ -32,7 +34,7 @@
       </div>
 
       <!-- Right Side -->
-      <div class="bg-white w-full -mt-6 md:w-1/2 p-8 md:p-16 flex flex-col">
+      <div class="bg-white w-full -mt-14 md:w-1/2 p-8 md:p-16 flex flex-col">
         <div
           class="max-w-md mx-auto md:mx-0 md:mr-auto flex-1 flex flex-col justify-center"
         >
