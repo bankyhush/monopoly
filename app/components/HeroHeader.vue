@@ -44,9 +44,9 @@ const isDark = computed({
 
 <template>
   <ClientOnly v-if="!colorMode?.forced">
-    <header class="relative z-50">
+    <header class="relative z-50 border-b-1 border-gray-300">
       <nav
-        class="fixed top-0 left-0 w-full bg-white/80 dark:bg-gray-950 backdrop-blur-lg border-b border-gray-200 dark:border-zinc-950 transition"
+        class="fixed top-0 left-0 w-full bg-white/80 dark:bg-gray-950 backdrop-blur-lg border-b border-gray-200 dark:border-zinc-950 transition dark:border-gray-200"
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-16">
@@ -84,13 +84,13 @@ const isDark = computed({
             <div class="hidden lg:flex items-center space-x-3">
               <NuxtLink
                 to="/login"
-                class="px-4 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-foreground transition"
+                class="px-4 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-sm font-medium text-black hover:text-foreground hover:border-foreground transition dark:text-white"
               >
                 Login
               </NuxtLink>
               <NuxtLink
                 to="/register"
-                class="px-4 py-1.5 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary/90 transition"
+                class="px-4 py-1.5 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary/90 transition dark:text-black"
               >
                 Sign Up
               </NuxtLink>
