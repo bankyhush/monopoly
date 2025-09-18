@@ -9,12 +9,12 @@
       <section class="overflow-x-hidden">
         <!-- Section 1 -->
         <section>
-          <div class="pb-24 pt-5 md:pb-32 lg:pb-56 lg:pt-44">
+          <div class="mt-6 pb-24 pt-5 md:pb-32 lg:pb-56 lg:pt-44">
             <div
               class="mx-auto flex max-w-6xl flex-col items-center px-6 lg:flex-row lg:items-start lg:justify-between"
             >
               <!-- Text content -->
-              <div class="max-w-xl text-center mt-6 lg:text-left lg:w-1/2">
+              <div class="max-w-xl text-center lg:text-left lg:w-1/2">
                 <h1
                   class="mt-8 text-balance text-5xl font-medium md:text-6xl xl:text-7xl"
                 >
@@ -62,6 +62,36 @@
                 >
                   <source src="/clips/vc23.mp4" type="video/mp4" />
                 </video>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="bg-background pb-1 md:pb-3">
+          <div class="group relative m-auto max-w-6xl px-6">
+            <div class="flex flex-col items-center md:flex-row">
+              <div class="relative py-2 md:w-[calc(100%-11rem)]">
+                <InfiniteSlider :speed="40" :speedOnHover="20" :gap="112">
+                </InfiniteSlider>
+
+                <!-- Blurs and gradients -->
+                <div
+                  class="bg-linear-to-r from-background absolute inset-y-0 left-0 w-20"
+                ></div>
+                <div
+                  class="bg-linear-to-l from-background absolute inset-y-0 right-0 w-20"
+                ></div>
+                <ProgressiveBlur
+                  class="pointer-events-none absolute left-0 top-0 h-full w-20"
+                  direction="left"
+                  :blurIntensity="1"
+                />
+                <ProgressiveBlur
+                  class="pointer-events-none absolute right-0 top-0 h-full w-20"
+                  direction="right"
+                  :blurIntensity="1"
+                />
               </div>
             </div>
           </div>

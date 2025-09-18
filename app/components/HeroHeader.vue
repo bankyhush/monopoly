@@ -96,7 +96,7 @@ const isDark = computed({
               </NuxtLink>
               <UButton
                 class="cursor-pointer"
-                :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+                :icon="isDark ? 'line-md:sun-rising-loop' : 'line-md:moon-loop'"
                 color="neutral"
                 variant="ghost"
                 @click="isDark = !isDark"
@@ -127,6 +127,13 @@ const isDark = computed({
             <div
               class="bg-white border-1 rounded-4xl shadow-2xl border-zinc-900 dark:bg-zinc-800 p-5 dark:border-zinc-700 dark:shadow-2xl dark:shadow-[#333]"
             >
+              <UButton
+                class="cursor-pointer block md:hidden float-right"
+                :icon="isDark ? 'line-md:sun-rising-loop' : 'line-md:moon-loop'"
+                color="neutral"
+                variant="ghost"
+                @click="isDark = !isDark"
+              />
               <nav class="space-y-4">
                 <NuxtLink
                   v-for="item in menuItems"
@@ -138,7 +145,7 @@ const isDark = computed({
                   {{ item.name }}
                 </NuxtLink>
 
-                <div class="mt-6 space-y-3">
+                <div class="flex justify-center items-center mt-6 space-x-3">
                   <NuxtLink
                     to="/login"
                     class="block w-full text-center px-4 py-2 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground transition"
@@ -153,16 +160,6 @@ const isDark = computed({
                   >
                     Sign Up
                   </NuxtLink>
-                </div>
-
-                <div class="mt-6 flex justify-center">
-                  <UButton
-                    class="cursor-pointer"
-                    :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
-                    color="neutral"
-                    variant="ghost"
-                    @click="isDark = !isDark"
-                  />
                 </div>
               </nav>
             </div>

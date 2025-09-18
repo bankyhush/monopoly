@@ -71,7 +71,6 @@
               <!-- Email Login -->
               <div v-if="currentTab === 'email'">
                 <form
-                  @submit.prevent="onSubmit"
                   class="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg dark:bg-zinc-800"
                 >
                   <!-- Email Field -->
