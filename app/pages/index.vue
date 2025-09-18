@@ -1,5 +1,11 @@
 <template>
-  <div class="text-black">
-    <NuxtLink to="/login">Login</NuxtLink>
-  </div>
+  <main>
+    <div class="pb-[50px]">
+      <HeroHeader />
+    </div>
+
+    <div>
+      <!-- Others -->
+    </div>
+  </main>
 </template>

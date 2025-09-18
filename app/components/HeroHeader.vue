@@ -46,7 +46,7 @@ const isDark = computed({
   <ClientOnly v-if="!colorMode?.forced">
     <header class="relative z-50">
       <nav
-        class="fixed top-0 left-0 w-full bg-white/80 dark:bg-background/80 backdrop-blur-lg border-b border-gray-200 dark:border-zinc-800 transition"
+        class="fixed top-0 left-0 w-full bg-white/80 dark:bg-gray-950 backdrop-blur-lg border-b border-gray-200 dark:border-zinc-950 transition"
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-16">
