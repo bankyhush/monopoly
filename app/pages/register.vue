@@ -187,6 +187,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { navigateTo } from "#app";
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
@@ -221,17 +222,11 @@ const registerHandler = async () => {
       navigateTo("/verify");
     }, 3000);
   } catch (err) {
-    if (err?.data?.message) {
-      // Custom server error
-      errorMessage.value = err.data.message;
-    } else if (err?.message === "Network Error" || err?.status === 0) {
-      // Network or server unreachable
-      errorMessage.value =
-        "Unable to reach server. Please check your connection.";
-    } else {
-      // Catch-all fallback
-      errorMessage.value = "Something went wrong. Please try again.";
-    }
+    // Handle API errors
+    errorMessage.value =
+      err?.data?.message ||
+      err?.message ||
+      "Registration failed. Please try again.";
   } finally {
     loading.value = false;
   }

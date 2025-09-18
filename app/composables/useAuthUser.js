@@ -3,37 +3,51 @@ import { useState } from "#app";
 export const useAuthUser = () => {
   const user = useState("authUser", () => null);
 
-  async function fetchUser() {
+  const fetchUser = async () => {
     try {
-      const res = await $fetch("/api/auth/me");
+      const res = await $fetch("/api/auth/me", { credentials: "include" });
       user.value = res.user;
     } catch {
       user.value = null;
     }
-  }
+  };
 
-  async function login(email, password) {
+  const login = async (email, password) => {
     const res = await $fetch("/api/auth/login", {
       method: "POST",
       body: { email, password },
+      credentials: "include",
     });
-    user.value = res.user;
-    return res.user;
-  }
 
-  async function register(fullname, email, password) {
+    user.value = res.user;
+    return res; // ✅ Return full response (not just res.user)
+  };
+
+  const register = async (fullname, email, password) => {
     const res = await $fetch("/api/auth/register", {
       method: "POST",
       body: { fullname, email, password },
+      credentials: "include",
     });
+
     user.value = res.user;
-    return res.user;
-  }
+    return res; // ✅ Consistent return
+  };
 
-  async function logout() {
-    await $fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+  const logout = async () => {
+    await $fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {});
+
     user.value = null;
-  }
+  };
 
-  return { user, fetchUser, login, register, logout };
+  return {
+    user,
+    fetchUser,
+    login,
+    register,
+    logout,
+  };
 };

@@ -1,8 +1,6 @@
-// utils/getAuthUser.js
-
-import { prisma } from "../database/prisma.js";
-
-import { verifyAccessToken } from "./jwt.js";
+import { prisma } from "../database/prisma";
+import { verifyAccessToken } from "./jwt";
+import { getCookie } from "h3";
 
 export async function getAuthUser(event) {
   try {
@@ -14,8 +12,14 @@ export async function getAuthUser(event) {
 
     const user = await prisma.user.findUnique({
       where: { userId: Number(payload.sub) },
-      select: { userId: true, email: true, role: true, fullname: true },
+      select: {
+        userId: true,
+        email: true,
+        role: true,
+        fullname: true,
+      },
     });
+
     return user;
   } catch {
     return null;

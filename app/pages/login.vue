@@ -83,7 +83,7 @@
                   <UAlert
                     color="success"
                     variant="subtle"
-                    title="Success!"
+                    title="Welcome back!"
                     :description="successMessage"
                     icon="i-lucide-check-circle"
                   />
@@ -110,7 +110,7 @@
                   <input
                     type="email"
                     placeholder="Email or Sub-account"
-                    v-model="formData.email"
+                    v-model="email"
                     required
                     class="w-full pl-10 pr-3 py-1.5 rounded-md border border-gray-300 bg-gray-100 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
@@ -125,7 +125,7 @@
                   <input
                     :type="showPassword ? 'text' : 'password'"
                     placeholder="Password"
-                    v-model="formData.password"
+                    v-model="password"
                     required
                     class="w-full pl-10 pr-10 py-1.5 rounded-md border border-gray-300 bg-gray-100 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
@@ -213,10 +213,9 @@
 </template>
 
 <script setup>
+import { useAuthUser } from "~/composables/useAuthUser";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import { navigateTo, useRouter } from "#app";
 
 const currentTab = ref("email");
 const showPassword = ref(false);
@@ -225,36 +224,29 @@ const isLoading = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 
-const formData = ref({
-  email: "",
-  password: "",
-});
+const email = ref("");
+const password = ref("");
+
+const { login } = useAuthUser();
 
 const loginHandler = async () => {
   errorMessage.value = "";
   successMessage.value = "";
-
-  if (!formData.value.email || !formData.value.password) {
-    errorMessage.value = "Please enter both email and password.";
-    return;
-  }
-
   isLoading.value = true;
 
   try {
-    const response = await $fetch("/api/auth/login", {
-      method: "POST",
-      body: {
-        email: formData.value.email,
-        password: formData.value.password,
-      },
-    });
+    const response = await login(email.value, password.value);
 
     successMessage.value = "Login successful. Redirecting...";
-    setTimeout(() => {
-      router.push("/dashboard"); // or navigateTo("/dashboard") if using Nuxt composable
-    }, 1000);
+
+    // ✅ Redirect immediately based on role
+    if (response?.user?.role === "ADMIN") {
+      await navigateTo("/wp-admin");
+    } else {
+      await navigateTo("/dashboard");
+    }
   } catch (err) {
+    console.error("Login error:", err);
     errorMessage.value =
       err?.data?.message || err?.message || "Login failed. Please try again.";
   } finally {

@@ -1,21 +1,23 @@
+//app/ middleware/auth.global.js
+
 import { useAuthUser } from "~/composables/useAuthUser";
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const { user, fetchUser } = useAuthUser();
-
-  // Define public (whitelisted) routes
-  const publicPages = [
+  const publicRoutes = [
     "/",
-    "/about",
-    "/contact",
     "/login",
     "/register",
+    "/about",
+    "/contact",
     "/verify",
   ];
+  const { user, fetchUser } = useAuthUser();
 
   if (!user.value) await fetchUser();
 
-  if (!user.value && !publicPages.includes(to.path)) {
+  const isPublic = publicRoutes.includes(to.path);
+
+  if (!user.value && !isPublic) {
     return navigateTo("/login");
   }
 });
